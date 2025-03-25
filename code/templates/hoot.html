@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🦉 Owl Fact Generator</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #fefefe;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-weight: normal;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    select, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #eee;
+    }
+
+    #fact {
+      margin-top: 30px;
+      font-size: 1.3em;
+      max-width: 600px;
+      text-align: center;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+      z-index: 2;
+    }
+
+    /* Floating feathers */
+    .feather {
+      position: absolute;
+      width: 30px;
+      animation: fall 10s linear infinite;
+      opacity: 0.5;
+    }
+
+    @keyframes fall {
+      0% {
+        top: -100px;
+        transform: rotate(0deg);
+      }
+      100% {
+        top: 110%;
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating feathers 
+  <img src="/static/feather.png" class="feather" style="left: 10%;" />
+  <img src="/static/feather.png" class="feather" style="left: 40%; animation-delay: 2s;" />
+  <img src="/static/feather.png" class="feather" style="left: 70%; animation-delay: 4s;" />
+  <img src="/static/feather.png" class="feather" style="left: 85%; animation-delay: 1s;" />
+  -->
+
+  <h1>🦉 Owl Fact Generator</h1>
+  <h2>Where do you want your fact from?</h2>
+
+  <select id="mode">
+    <option value="random">from the wiki? from nat geo? from chatGPT? from random articles?</option>
+    <option value="wiki">give me a fact from my super trusted source, wikipedia.</option>
+    <option value="file">uhhhhh random article #41738</option>
+    <option value="bird">nat geo the goat</option>
+    <option value="gpt">chatGPT cause im borign</option>
+  </select>
+
+  <button onclick="getFact()">Get Fact</button>
+
+  <div id="fact">Click above to get a hoot-worthy fact.</div>
+
+  <audio id="hootSound" src="/static/hoot.mp3" preload="auto"></audio>
+
+  <script>
+    async function getFact() {
+      const mode = document.getElementById("mode").value;
+      const res = await fetch(`/fact?mode=${mode}`);
+      const text = await res.text();
+      document.getElementById("fact").textContent = text;
+
+
+      const sound = document.getElementById("hootSound");
+      sound.currentTime = 0;
+      sound.play();
+    }
+  </script>
+
+</body>
+</html>
