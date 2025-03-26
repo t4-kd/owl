@@ -3,6 +3,7 @@ from facts_wiki import get_wiki_fact
 from gpt_facts import get_gpt_fact
 from scrape_facts import get_natgeo_fact
 from demo import get_file_fact
+import os
 import random
 
 app = Flask(__name__)

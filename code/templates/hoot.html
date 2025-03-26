@@ -3,16 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>🦉 Owl Fact Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --green: #3ba55d;
+      --yellow: #facc15;
+      --gray-bg: #f8f9fa;
+      --text-dark: #333;
+      --card-bg: #ffffff;
+      --accent: #ffe07d;
+    }
+
     body {
-      font-family: "Segoe UI", sans-serif;
-      background: #fefefe;
+      font-family: 'Quicksand', sans-serif;
+      margin: 0;
+      background: var(--gray-bg);
+      color: var(--text-dark);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 50px;
-      overflow: hidden;
+      min-height: 100vh;
       position: relative;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: var(--green);
+      width: 100%;
+      padding: 20px;
+      color: white;
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: bold;
+    }
+
+    .main {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .main img.owl {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    #random-owl-img {
+      width: 180px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     h1 {
@@ -22,94 +61,165 @@
 
     h2 {
       font-weight: normal;
-      margin-top: 0;
+      font-size: 1.1em;
       margin-bottom: 20px;
     }
 
     select, button {
-      padding: 10px;
+      padding: 12px;
       margin: 10px;
       font-size: 1em;
-      border-radius: 6px;
-      border: 1px solid #aaa;
+      border-radius: 10px;
+      border: 2px solid var(--green);
       cursor: pointer;
+      background: white;
+      transition: background 0.2s;
     }
 
     button:hover {
-      background-color: #eee;
+      background: var(--accent);
     }
 
     #fact {
       margin-top: 30px;
       font-size: 1.3em;
-      max-width: 600px;
-      text-align: center;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ccc;
+      max-width: 700px;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: relative;
       z-index: 2;
     }
 
-    /* Floating feathers */
+    #loading {
+      font-size: 1.1em;
+      display: none;
+      margin-top: 20px;
+      animation: pulse 1.2s infinite;
+      color: #888;
+    }
+
     .feather {
       position: absolute;
-      width: 30px;
-      animation: fall 10s linear infinite;
+      width: 40px;
       opacity: 0.5;
+      animation: fall linear infinite;
+      z-index: 1;
     }
 
     @keyframes fall {
-      0% {
-        top: -100px;
-        transform: rotate(0deg);
+      0% { top: -100px; transform: rotate(0deg); }
+      100% { top: 110%; transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
       }
-      100% {
-        top: 110%;
-        transform: rotate(360deg);
+      #fact {
+        font-size: 1.1em;
+        padding: 15px;
       }
     }
   </style>
 </head>
 <body>
+  <header>🦉 Owl Fact Generator</header>
 
-  <!-- Floating feathers 
-  <img src="/static/feather.png" class="feather" style="left: 10%;" />
-  <img src="/static/feather.png" class="feather" style="left: 40%; animation-delay: 2s;" />
-  <img src="/static/feather.png" class="feather" style="left: 70%; animation-delay: 4s;" />
-  <img src="/static/feather.png" class="feather" style="left: 85%; animation-delay: 1s;" />
-  -->
+  <!-- Floating feathers -->
+  <img src="/static/feather.png" class="feather" style="left: 5%; animation-duration: 10s;">
+  <img src="/static/feather.png" class="feather" style="left: 25%; animation-duration: 12s; animation-delay: 2s;">
+  <img src="/static/feather.png" class="feather" style="left: 50%; animation-duration: 14s; animation-delay: 4s;">
+  <img src="/static/feather.png" class="feather" style="left: 75%; animation-duration: 11s; animation-delay: 1s;">
+  <img src="/static/feather.png" class="feather" style="left: 90%; animation-duration: 13s; animation-delay: 3s;">
 
-  <h1>🦉 Owl Fact Generator</h1>
-  <h2>Where do you want your fact from?</h2>
+  <div class="main">
+    <img src="/static/owl1.webp" class="owl" alt="Owl Icon">
 
-  <select id="mode">
-    <option value="random">from the wiki? from nat geo? from chatGPT? from random articles?</option>
-    <option value="wiki">give me a fact from my super trusted source, wikipedia.</option>
-    <option value="file">uhhhhh random article #41738</option>
-    <option value="bird">nat geo the goat</option>
-    <option value="gpt">chatGPT cause im borign</option>
-  </select>
+    <h1>Get your hoot-worthy fact</h1>
+    <h2>Choose your source below and press the button!</h2>
 
-  <button onclick="getFact()">Get Fact</button>
+    <select id="mode">
+      <option value="random">Give me something random 🔀</option>
+      <option value="wiki">Wikipedia 📚</option>
+      <option value="file">Random Article 📄</option>
+      <option value="bird">Nat Geo 🐦</option>
+      <option value="gpt">ChatGPT 🤖</option>
+    </select>
 
-  <div id="fact">Click above to get a hoot-worthy fact.</div>
+    <br>
+    <button onclick="getFact()">Get Fact</button>
+
+    <div id="loading">Fetching a hoot...</div>
+    <img id="random-owl-img" src="" alt="Random Owl" style="display:none">
+    <div id="fact">Click the button to discover owl wisdom!</div>
+  </div>
 
   <audio id="hootSound" src="/static/hoot.mp3" preload="auto"></audio>
 
   <script>
+    const owlImages = [
+      '/static/owl.jpeg',
+      '/static/owl2.jpg',
+      '/static/owl3.jpeg',
+      '/static/owl4.png',
+      '/static/owl5.webp'
+    ];
+
     async function getFact() {
       const mode = document.getElementById("mode").value;
-      const res = await fetch(`/fact?mode=${mode}`);
-      const text = await res.text();
-      document.getElementById("fact").textContent = text;
+      const factBox = document.getElementById("fact");
+      const loading = document.getElementById("loading");
+      const sound = document.getElementById("hootSound");
+      const owlImg = document.getElementById("random-owl-img");
 
+      factBox.textContent = "";
+      loading.style.display = "block";
+      owlImg.style.display = "none";
 
+      try {
+        const res = await fetch(`/fact?mode=${mode}`);
+        const text = await res.text();
+        loading.style.display = "none";
+        playSound();
+        typeText(text);
+
+        // Show a random owl image
+        const img = owlImages[Math.floor(Math.random() * owlImages.length)];
+        owlImg.src = img;
+        owlImg.style.display = "block";
+      } catch (err) {
+        loading.style.display = "none";
+        factBox.textContent = "Something went wrong 🥲";
+      }
+    }
+
+    function typeText(text) {
+      const el = document.getElementById("fact");
+      el.textContent = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 18);
+    }
+
+    function playSound() {
       const sound = document.getElementById("hootSound");
       sound.currentTime = 0;
       sound.play();
     }
   </script>
-
 </body>
 </html>
